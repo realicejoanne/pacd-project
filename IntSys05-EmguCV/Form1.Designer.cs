@@ -62,6 +62,7 @@
             this.imgBoxDetected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgBoxDetected.TabIndex = 2;
             this.imgBoxDetected.TabStop = false;
+            this.imgBoxDetected.DoubleClick += new System.EventHandler(this.imgBoxDetected_DoubleClick);
             // 
             // imgBoxOriginal
             // 
@@ -72,6 +73,7 @@
             this.imgBoxOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgBoxOriginal.TabIndex = 3;
             this.imgBoxOriginal.TabStop = false;
+            this.imgBoxOriginal.DoubleClick += new System.EventHandler(this.imgBoxOriginal_DoubleClick);
             // 
             // tboxImagePath
             // 

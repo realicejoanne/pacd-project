@@ -25,12 +25,12 @@ namespace IntSys05_EmguCV
             InitializeComponent();
         }
 
+     
+
         private void button1_Click(object sender, EventArgs e)
         {
-            // debug paths
+            // debug path
             imagePath = "D://Workbench//Shapes.jpg";
-
-
 
 
             StringBuilder msgBuilder = new StringBuilder("Performance: ");
@@ -75,6 +75,10 @@ namespace IntSys05_EmguCV
                10); //gap between lines
             */
 
+            // debug
+            //imgBoxOriginal.Image = cannyEdges;
+
+
             LineSegment2D[] lines = CvInvoke.HoughLinesP(
                cannyEdges,
                1, //Distance resolution in pixel-related units
@@ -82,6 +86,12 @@ namespace IntSys05_EmguCV
                10, //threshold
                15, //min Line width
                1); //gap between lines
+
+            // debug
+            Image<Bgr, Byte> linesImage = img.CopyBlank();
+            foreach (LineSegment2D line in lines)
+                linesImage.Draw(line, new Bgr(Color.Green), 2);
+            imgBoxOriginal.Image = linesImage;
 
             watch.Stop();
             msgBuilder.Append(String.Format("Canny & Hough lines - {0} ms; ", watch.ElapsedMilliseconds));
@@ -199,6 +209,20 @@ namespace IntSys05_EmguCV
             }
         }
 
+        private void imgBoxOriginal_DoubleClick(object sender, EventArgs e)
+        {
+            FormImage formImage = new FormImage();
+            bool success = formImage.SetImage(imgBoxOriginal.Image);
+            if(success)
+                formImage.Show();
+        }
 
+        private void imgBoxDetected_DoubleClick(object sender, EventArgs e)
+        {
+            FormImage formImage = new FormImage();
+            bool success = formImage.SetImage(imgBoxDetected.Image);
+            if (success)
+                formImage.Show();
+        }
     }
 }

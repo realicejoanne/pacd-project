@@ -25,9 +25,7 @@ namespace IntSys05_EmguCV
             InitializeComponent();
         }
 
-     
-
-        private void button1_Click(object sender, EventArgs e)
+        private void btnStart_Click(object sender, EventArgs e)
         {
             // debug path
             imagePath = "D://Workbench//Shapes.jpg";
@@ -76,22 +74,9 @@ namespace IntSys05_EmguCV
             */
 
             // debug
-            //imgBoxOriginal.Image = cannyEdges;
+            imgBoxOriginal.Image = cannyEdges;
 
 
-            LineSegment2D[] lines = CvInvoke.HoughLinesP(
-               cannyEdges,
-               1, //Distance resolution in pixel-related units
-               Math.PI / 45.0, //Angle resolution measured in radians.
-               10, //threshold
-               15, //min Line width
-               1); //gap between lines
-
-            // debug
-            Image<Bgr, Byte> linesImage = img.CopyBlank();
-            foreach (LineSegment2D line in lines)
-                linesImage.Draw(line, new Bgr(Color.Green), 2);
-            imgBoxOriginal.Image = linesImage;
 
             watch.Stop();
             msgBuilder.Append(String.Format("Canny & Hough lines - {0} ms; ", watch.ElapsedMilliseconds));
@@ -112,10 +97,9 @@ namespace IntSys05_EmguCV
                     using (VectorOfPoint approxContour = new VectorOfPoint())
                     {
                         
-                        //CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.05, true);
-                        CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.01, true);
+                        CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.025, true);
 
-                        if (CvInvoke.ContourArea(approxContour, false) > 1) //only consider contours with area greater than 250
+                        if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours with area greater than 250
                         {
                             if (approxContour.Size == 3) //The contour has 3 vertices, it is a triangle
                             {
@@ -174,12 +158,16 @@ namespace IntSys05_EmguCV
             imgBoxDetected.Image = triangleRectangleImage;
             #endregion
 
+            // debug cross
+            //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
+
+            /* DEPRICATED
             #region draw lines
             Image<Bgr, Byte> lineImage = img.CopyBlank();
             foreach (LineSegment2D line in lines)
                 triangleRectangleImage.Draw(line, new Bgr(Color.Green), 2);
             imgBoxDetected.Image = triangleRectangleImage;
-            #endregion
+            #endregion*/
 
 
             Debug.WriteLine(msgBuilder.ToString());
@@ -224,5 +212,6 @@ namespace IntSys05_EmguCV
             if (success)
                 formImage.Show();
         }
+
     }
 }

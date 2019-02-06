@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnStart = new System.Windows.Forms.Button();
             this.imgBoxDetected = new Emgu.CV.UI.ImageBox();
             this.imgBoxOriginal = new Emgu.CV.UI.ImageBox();
             this.tboxImagePath = new System.Windows.Forms.TextBox();
@@ -38,20 +38,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxOriginal)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // btnStart
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.LightCyan;
-            this.button1.Location = new System.Drawing.Point(384, 481);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 30);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Start";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnStart.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStart.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnStart.Location = new System.Drawing.Point(460, 505);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(90, 30);
+            this.btnStart.TabIndex = 0;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = false;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // imgBoxDetected
             // 
@@ -92,11 +92,11 @@
             this.btnImagePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.btnImagePath.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
             this.btnImagePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnImagePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImagePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImagePath.ForeColor = System.Drawing.Color.LightCyan;
-            this.btnImagePath.Location = new System.Drawing.Point(435, 301);
+            this.btnImagePath.Location = new System.Drawing.Point(422, 307);
             this.btnImagePath.Name = "btnImagePath";
-            this.btnImagePath.Size = new System.Drawing.Size(39, 30);
+            this.btnImagePath.Size = new System.Drawing.Size(34, 24);
             this.btnImagePath.TabIndex = 19;
             this.btnImagePath.Text = "...";
             this.btnImagePath.UseVisualStyleBackColor = false;
@@ -112,10 +112,11 @@
             this.Controls.Add(this.imgBoxOriginal);
             this.Controls.Add(this.imgBoxDetected);
             this.Controls.Add(this.tboxImagePath);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnStart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EmguCV";
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxDetected)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxOriginal)).EndInit();
@@ -126,7 +127,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnStart;
         private Emgu.CV.UI.ImageBox imgBoxDetected;
         private Emgu.CV.UI.ImageBox imgBoxOriginal;
         private System.Windows.Forms.TextBox tboxImagePath;

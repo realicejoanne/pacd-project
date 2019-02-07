@@ -54,17 +54,45 @@ namespace IntSys05_EmguCV
             CvInvoke.PyrUp(pyrDown, uImage);
             //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
 
+            // reset lists
+            circles = null;
+            triangles = null;
+            rectangles = null;
+            hexagons = null;
 
-            DetectCircles(uImage);
-            UMat cannyEdgesImg = DetectEdges(uImage);
-            DetectPolygons(cannyEdgesImg);
+
+            if(cbFilterByColor.Checked)
+            { // WIP
+                uImage = DetectColor(sliderFilterByColor.Value);
+                Image<Bgr, byte> image2;
+                image2 = uImage.ToImage<Bgr, byte>();
+               
+                // Convert the image to grayscale and filter out the noise
+                CvInvoke.CvtColor(image2, uImage, ColorConversion.Bgr2Gray);
+
+                // Use image pyr to remove noise
+                UMat pyrDown2 = new UMat();
+                CvInvoke.PyrDown(uImage, pyrDown2);
+                CvInvoke.PyrUp(pyrDown2, uImage);
+                //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
+                
+            }
+
+
+            if (cbCircles.Checked)
+            {
+                DetectCircles(uImage);
+            }
+            
+            //UMat cannyEdgesImg = DetectEdges(uImage);
+            DetectPolygons(uImage, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked);
 
             DrawShapes();
 
 
 
-
-
+            // debug
+            //imgBoxOriginal.Image = uImage;
         }
 
         void DetectCircles(UMat uImage)
@@ -87,7 +115,7 @@ namespace IntSys05_EmguCV
             return cannyEdgesImg;
         }
 
-        void DetectPolygons(UMat cannyEdgesImg)
+        void DetectPolygons(UMat cannyEdgesImg, bool detectTriangles, bool detectRectangles, bool detectHexagons)
         {
             triangles = new List<Triangle2DF>();
             rectangles = new List<RotatedRect>();
@@ -108,13 +136,13 @@ namespace IntSys05_EmguCV
 
                 if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours bigger than defined area
                 {
-                    if (approxContour.Size == 3)
+                    if (approxContour.Size == 3 && detectTriangles)
                     { // triangle
 
                         Point[] pts = approxContour.ToArray();      // take points that define a triangle
                         triangles.Add(new Triangle2DF(pts[0], pts[1], pts[2]));     // add triangle to the list
                     }
-                    else if (approxContour.Size == 4)
+                    else if (approxContour.Size == 4 && detectRectangles)
                     { // rectangle
 
                         // Determine if all the angles in the contour are within [80, 100] degree
@@ -139,7 +167,7 @@ namespace IntSys05_EmguCV
                         if (isRectangle)
                             rectangles.Add(CvInvoke.MinAreaRect(approxContour)); // if it's a rectangle add it to the list
                     }
-                    else if(approxContour.Size == 6)
+                    else if(approxContour.Size == 6 && detectHexagons)
                     { // hexagon
 
                         // Determine if all the angles in the contour are within [50, 70] degree
@@ -217,15 +245,15 @@ namespace IntSys05_EmguCV
             //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
         }
 
-        void DetectColor()
+        UMat DetectColor(int hue)
         {
-            Hsv targetColor = new Hsv(100, 210, 210);
+            Hsv targetColor = new Hsv(hue, 210, 210);
             int tressholdHue = 15;
             int tressholdSat = 45;
             int tressholdVal = 45;
 
             Image<Bgr, Byte> image = new Image<Bgr, byte>(imagePath);
-            //frame = frame.SmoothGaussian(3, 3, 1, 1);
+            //image = image.SmoothGaussian(3, 3, 1, 1);
             
             Hsv m_Lower = new Hsv(targetColor.Hue - tressholdHue, targetColor.Satuation - tressholdSat, targetColor.Value - tressholdVal);
             Hsv m_Higher = new Hsv(targetColor.Hue + tressholdHue, targetColor.Satuation + tressholdSat, targetColor.Value + tressholdVal);
@@ -234,7 +262,8 @@ namespace IntSys05_EmguCV
             HsvImage = HsvImage.SmoothGaussian(5, 5, 0.1, 0.1);
             Image<Gray, byte> detectedImage = HsvImage.InRange(m_Lower, m_Higher);
 
-            // return detected image here
+            detectedImage = detectedImage.Not();
+            return detectedImage.ToUMat();
         }
 
 
@@ -280,5 +309,16 @@ namespace IntSys05_EmguCV
                 formImage.Show();
         }
 
+        private void cbFilterByColor_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbFilterByColor.Checked)
+            {
+                sliderFilterByColor.Enabled = true;
+            }
+            else
+            {
+                sliderFilterByColor.Enabled = false;
+            }
+        }
     }
 }

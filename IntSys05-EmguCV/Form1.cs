@@ -21,8 +21,9 @@ namespace IntSys05_EmguCV
         public Image<Bgr, Byte> image;
 
         public CircleF[] circles;
-        public List<Triangle2DF> triangleList;
-        public List<RotatedRect> boxList;
+        public List<Triangle2DF> triangles;
+        public List<RotatedRect> rectangles;
+        public List<LineSegment2D[]> hexagons;
 
 
         public Form1()
@@ -38,6 +39,8 @@ namespace IntSys05_EmguCV
             // Load image
             image = new Image<Bgr, byte>(imagePath);
 
+            // show image in imageBox
+            imgBoxOriginal.Image = image;
 
 
             // Convert the image to grayscale and filter out the noise
@@ -68,6 +71,7 @@ namespace IntSys05_EmguCV
         {
             double cannyThreshold = 180.0;
             double circleAccumulatorThreshold = 120;
+
             circles = CvInvoke.HoughCircles(uImage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
         }
 
@@ -76,6 +80,8 @@ namespace IntSys05_EmguCV
             double cannyThreshold = 180.0;
             double cannyThresholdLinking = 120.0;
             UMat cannyEdgesImg = new UMat();
+
+            // detect edges using canny algorithm and save them as a binary image
             CvInvoke.Canny(uImage, cannyEdgesImg, cannyThreshold, cannyThresholdLinking);
 
             return cannyEdgesImg;
@@ -83,80 +89,130 @@ namespace IntSys05_EmguCV
 
         void DetectPolygons(UMat cannyEdgesImg)
         {
-            triangleList = new List<Triangle2DF>();
-            boxList = new List<RotatedRect>();
+            triangles = new List<Triangle2DF>();
+            rectangles = new List<RotatedRect>();
+            hexagons = new List<LineSegment2D[]>();
 
-            using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
-            {
-                CvInvoke.FindContours(cannyEdgesImg, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
-                int count = contours.Size;
-                for (int i = 0; i < count; i++)
+            // find contours from binary image
+            VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
+            CvInvoke.FindContours(cannyEdgesImg, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+
+            for (int i = 0; i < contours.Size; i++)
+            { // go trough all detected contours
+
+                VectorOfPoint contour = contours[i];    // select i-th contour
+
+                // approximate a polygon
+                VectorOfPoint approxContour = new VectorOfPoint();
+                CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.025, true);
+
+                if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours bigger than defined area
                 {
-                    using (VectorOfPoint contour = contours[i])
-                    using (VectorOfPoint approxContour = new VectorOfPoint())
-                    {
+                    if (approxContour.Size == 3)
+                    { // triangle
 
-                        CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.025, true);
+                        Point[] pts = approxContour.ToArray();      // take points that define a triangle
+                        triangles.Add(new Triangle2DF(pts[0], pts[1], pts[2]));     // add triangle to the list
+                    }
+                    else if (approxContour.Size == 4)
+                    { // rectangle
 
-                        if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours with area greater than 250
-                        {
-                            if (approxContour.Size == 3) //The contour has 3 vertices, it is a triangle
+                        // Determine if all the angles in the contour are within [80, 100] degree
+                        bool isRectangle = true;
+
+                        // create a line segment from points
+                        Point[] pts = approxContour.ToArray();
+                        LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
+
+                        for (int j = 0; j < edges.Length; j++)
+                        { // go trough all edges of a potential rectangle
+
+                            // get angle between two adjcent edges
+                            double angle = Math.Abs(edges[(j + 1) % edges.Length].GetExteriorAngleDegree(edges[j]));
+                            if (angle < 80 || angle > 100)
                             {
-                                Point[] pts = approxContour.ToArray();
-                                triangleList.Add(new Triangle2DF(
-                                   pts[0],
-                                   pts[1],
-                                   pts[2]
-                                   ));
-                            }
-                            else if (approxContour.Size == 4) //The contour has 4 vertices.
-                            {
-                                // Determine if all the angles in the contour are within [80, 100] degree
-                                bool isRectangle = true;
-                                Point[] pts = approxContour.ToArray();
-                                LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
-
-                                for (int j = 0; j < edges.Length; j++)
-                                {
-                                    double angle = Math.Abs(
-                                       edges[(j + 1) % edges.Length].GetExteriorAngleDegree(edges[j]));
-                                    if (angle < 80 || angle > 100)
-                                    {
-                                        isRectangle = false;
-                                        break;
-                                    }
-                                }
-
-
-                                if (isRectangle) boxList.Add(CvInvoke.MinAreaRect(approxContour));
+                                isRectangle = false;
+                                break;
                             }
                         }
+                        
+                        if (isRectangle)
+                            rectangles.Add(CvInvoke.MinAreaRect(approxContour)); // if it's a rectangle add it to the list
                     }
+                    else if(approxContour.Size == 6)
+                    { // hexagon
+
+                        // Determine if all the angles in the contour are within [50, 70] degree
+                        bool isHexagon = true;
+
+                        // create a line segment from points
+                        Point[] pts = approxContour.ToArray();
+                        LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
+
+                        for (int j = 0; j < edges.Length; j++)
+                        { // go trough all edges of a potential hexagon
+
+                            // get angle between two adjcent edges
+                            double angle = Math.Abs(edges[(j + 1) % edges.Length].GetExteriorAngleDegree(edges[j]));
+                            if (angle < 50 || angle > 70)
+                            {
+                                isHexagon = false;
+                                break;
+                            }
+                        }
+
+                        if (isHexagon)
+                        { // if it's a hexagon add it to the list
+                            hexagons.Add(edges);
+                        }
+                            
+                    }
+
                 }
+                
             }
         }
 
         void DrawShapes()
         {
-            
-            // draw triangles and rectangles
-            Image<Bgr, Byte> triangleRectangleImage = image.CopyBlank();
-            foreach (Triangle2DF triangle in triangleList)
-                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
-            foreach (RotatedRect box in boxList)
-                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
-
-            imgBoxDetected.Image = triangleRectangleImage;
-
+            Image<Bgr, Byte> detectedImage = image.CopyBlank();
 
             // draw circles
-            Image<Bgr, Byte> circleImage = image.CopyBlank();
-            foreach (CircleF circle in circles)
-                triangleRectangleImage.Draw(circle, new Bgr(Color.Brown), 2);
-
-            imgBoxDetected.Image = triangleRectangleImage;
+            if(circles != null)
+            {
+                foreach (CircleF circle in circles)
+                    detectedImage.Draw(circle, new Bgr(Color.Crimson), 2);
+            }
             
+            // draw triangles
+            if (triangles != null)
+            {
+                foreach (Triangle2DF triangle in triangles)
+                    detectedImage.Draw(triangle, new Bgr(Color.LimeGreen), 2);
+            }
+            
+            // draw rectangles
+            if (rectangles != null)
+            {
+                foreach (RotatedRect box in rectangles)
+                    detectedImage.Draw(box, new Bgr(Color.DodgerBlue), 2);
+            }
 
+            // draw hexagons
+            if (hexagons != null)
+            {
+                foreach (LineSegment2D[] hexagon in hexagons)
+                {
+                    foreach(LineSegment2D edge in hexagon)
+                    {
+                        detectedImage.Draw(edge, new Bgr(Color.DarkViolet), 2);
+                    }
+                }
+            }
+
+
+            imgBoxDetected.Image = detectedImage;
+            
             // debug cross
             //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
         }

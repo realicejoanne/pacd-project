@@ -30,75 +30,84 @@ namespace IntSys05_EmguCV
             // debug path
             imagePath = "D://Workbench//Shapes.jpg";
 
+            // Load image
+            Image<Bgr, Byte> image = new Image<Bgr, byte>(imagePath);
 
-            StringBuilder msgBuilder = new StringBuilder("Performance: ");
 
-            //Load the image from file and resize it for display
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(imagePath);//Resize(400, 400, Emgu.CV.CvEnum.Inter.Linear, true);
 
-            //Convert the image to grayscale and filter out the noise
-            UMat uimage = new UMat();
-            CvInvoke.CvtColor(img, uimage, ColorConversion.Bgr2Gray);
+            // Convert the image to grayscale and filter out the noise
+            UMat uImage = new UMat();
+            //uImage = image.ToUMat();
+            CvInvoke.CvtColor(image, uImage, ColorConversion.Bgr2Gray);
 
-            //use image pyr to remove noise
+            // Use image pyr to remove noise
             UMat pyrDown = new UMat();
-            CvInvoke.PyrDown(uimage, pyrDown);
-            CvInvoke.PyrUp(pyrDown, uimage);
-
+            CvInvoke.PyrDown(uImage, pyrDown);
+            CvInvoke.PyrUp(pyrDown, uImage);
             //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
 
             
+            #region Find triangles and rectangles
+            
+            #endregion
 
-            #region circle detection
-            Stopwatch watch = Stopwatch.StartNew();
+            #region draw triangles and rectangles
+            Image<Bgr, Byte> triangleRectangleImage = image.CopyBlank();
+            foreach (Triangle2DF triangle in triangleList)
+                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
+            foreach (RotatedRect box in boxList)
+                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
+            imgBoxDetected.Image = triangleRectangleImage;
+            #endregion
+
+
+            
+            #region draw circles
+            Image<Bgr, Byte> circleImage = image.CopyBlank();
+            foreach (CircleF circle in circles)
+                triangleRectangleImage.Draw(circle, new Bgr(Color.Brown), 2);
+            imgBoxDetected.Image = triangleRectangleImage;
+            #endregion
+
+            // debug cross
+            //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
+
+
+        }
+
+        void DetectCircles()
+        {
             double cannyThreshold = 180.0;
             double circleAccumulatorThreshold = 120;
             CircleF[] circles = CvInvoke.HoughCircles(uimage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
 
-            watch.Stop();
-            msgBuilder.Append(String.Format("Hough circles - {0} ms; ", watch.ElapsedMilliseconds));
-            #endregion
+        }
 
-            #region Canny and edge detection
-            watch.Reset(); watch.Start();
+        UMat DetectEdges(UMat uImage)
+        {
+            double cannyThreshold = 180.0;
             double cannyThresholdLinking = 120.0;
-            UMat cannyEdges = new UMat();
-            CvInvoke.Canny(uimage, cannyEdges, cannyThreshold, cannyThresholdLinking);
+            UMat cannyEdgesImg = new UMat();
+            CvInvoke.Canny(uImage, cannyEdgesImg, cannyThreshold, cannyThresholdLinking);
 
-            /*
-            LineSegment2D[] lines = CvInvoke.HoughLinesP(
-               cannyEdges,
-               1, //Distance resolution in pixel-related units
-               Math.PI / 45.0, //Angle resolution measured in radians.
-               20, //threshold
-               30, //min Line width
-               10); //gap between lines
-            */
+            return cannyEdgesImg;
+        }
 
-            // debug
-            imgBoxOriginal.Image = cannyEdges;
-
-
-
-            watch.Stop();
-            msgBuilder.Append(String.Format("Canny & Hough lines - {0} ms; ", watch.ElapsedMilliseconds));
-            #endregion
-
-            #region Find triangles and rectangles
-            watch.Reset(); watch.Start();
+        void DetectPolygons()
+        {
             List<Triangle2DF> triangleList = new List<Triangle2DF>();
             List<RotatedRect> boxList = new List<RotatedRect>(); //a box is a rotated rectangle
 
             using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
             {
-                CvInvoke.FindContours(cannyEdges, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+                CvInvoke.FindContours(cannyEdgesImg, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
                 int count = contours.Size;
                 for (int i = 0; i < count; i++)
                 {
                     using (VectorOfPoint contour = contours[i])
                     using (VectorOfPoint approxContour = new VectorOfPoint())
                     {
-                        
+
                         CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.025, true);
 
                         if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours with area greater than 250
@@ -114,7 +123,7 @@ namespace IntSys05_EmguCV
                             }
                             else if (approxContour.Size == 4) //The contour has 4 vertices.
                             {
-                                #region determine if all the angles in the contour are within [80, 100] degree
+                                // Determine if all the angles in the contour are within [80, 100] degree
                                 bool isRectangle = true;
                                 Point[] pts = approxContour.ToArray();
                                 LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
@@ -129,7 +138,7 @@ namespace IntSys05_EmguCV
                                         break;
                                     }
                                 }
-                                #endregion
+
 
                                 if (isRectangle) boxList.Add(CvInvoke.MinAreaRect(approxContour));
                             }
@@ -137,33 +146,6 @@ namespace IntSys05_EmguCV
                     }
                 }
             }
-
-            watch.Stop();
-            msgBuilder.Append(String.Format("Triangles & Rectangles - {0} ms; ", watch.ElapsedMilliseconds));
-            #endregion
-
-            #region draw triangles and rectangles
-            Image<Bgr, Byte> triangleRectangleImage = img.CopyBlank();
-            foreach (Triangle2DF triangle in triangleList)
-                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
-            foreach (RotatedRect box in boxList)
-                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
-            imgBoxDetected.Image = triangleRectangleImage;
-            #endregion
-
-
-            
-            #region draw circles
-            Image<Bgr, Byte> circleImage = img.CopyBlank();
-            foreach (CircleF circle in circles)
-                triangleRectangleImage.Draw(circle, new Bgr(Color.Brown), 2);
-            imgBoxDetected.Image = triangleRectangleImage;
-            #endregion
-
-            // debug cross
-            //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
-
-
         }
 
         void DetectColor()

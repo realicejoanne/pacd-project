@@ -18,6 +18,11 @@ namespace IntSys05_EmguCV
     public partial class Form1 : Form
     {
         public string imagePath;
+        public Image<Bgr, Byte> image;
+
+        public CircleF[] circles;
+        public List<Triangle2DF> triangleList;
+        public List<RotatedRect> boxList;
 
 
         public Form1()
@@ -31,7 +36,7 @@ namespace IntSys05_EmguCV
             imagePath = "D://Workbench//Shapes.jpg";
 
             // Load image
-            Image<Bgr, Byte> image = new Image<Bgr, byte>(imagePath);
+            image = new Image<Bgr, byte>(imagePath);
 
 
 
@@ -46,41 +51,24 @@ namespace IntSys05_EmguCV
             CvInvoke.PyrUp(pyrDown, uImage);
             //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
 
-            
-            #region Find triangles and rectangles
-            
-            #endregion
 
-            #region draw triangles and rectangles
-            Image<Bgr, Byte> triangleRectangleImage = image.CopyBlank();
-            foreach (Triangle2DF triangle in triangleList)
-                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
-            foreach (RotatedRect box in boxList)
-                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
-            imgBoxDetected.Image = triangleRectangleImage;
-            #endregion
+            DetectCircles(uImage);
+            UMat cannyEdgesImg = DetectEdges(uImage);
+            DetectPolygons(cannyEdgesImg);
+
+            DrawShapes();
 
 
-            
-            #region draw circles
-            Image<Bgr, Byte> circleImage = image.CopyBlank();
-            foreach (CircleF circle in circles)
-                triangleRectangleImage.Draw(circle, new Bgr(Color.Brown), 2);
-            imgBoxDetected.Image = triangleRectangleImage;
-            #endregion
 
-            // debug cross
-            //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
 
 
         }
 
-        void DetectCircles()
+        void DetectCircles(UMat uImage)
         {
             double cannyThreshold = 180.0;
             double circleAccumulatorThreshold = 120;
-            CircleF[] circles = CvInvoke.HoughCircles(uimage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
-
+            circles = CvInvoke.HoughCircles(uImage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
         }
 
         UMat DetectEdges(UMat uImage)
@@ -93,10 +81,10 @@ namespace IntSys05_EmguCV
             return cannyEdgesImg;
         }
 
-        void DetectPolygons()
+        void DetectPolygons(UMat cannyEdgesImg)
         {
-            List<Triangle2DF> triangleList = new List<Triangle2DF>();
-            List<RotatedRect> boxList = new List<RotatedRect>(); //a box is a rotated rectangle
+            triangleList = new List<Triangle2DF>();
+            boxList = new List<RotatedRect>();
 
             using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
             {
@@ -146,6 +134,31 @@ namespace IntSys05_EmguCV
                     }
                 }
             }
+        }
+
+        void DrawShapes()
+        {
+            
+            // draw triangles and rectangles
+            Image<Bgr, Byte> triangleRectangleImage = image.CopyBlank();
+            foreach (Triangle2DF triangle in triangleList)
+                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
+            foreach (RotatedRect box in boxList)
+                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
+
+            imgBoxDetected.Image = triangleRectangleImage;
+
+
+            // draw circles
+            Image<Bgr, Byte> circleImage = image.CopyBlank();
+            foreach (CircleF circle in circles)
+                triangleRectangleImage.Draw(circle, new Bgr(Color.Brown), 2);
+
+            imgBoxDetected.Image = triangleRectangleImage;
+            
+
+            // debug cross
+            //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
         }
 
         void DetectColor()

@@ -47,6 +47,8 @@ namespace IntSys05_EmguCV
 
             //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
 
+            
+
             #region circle detection
             Stopwatch watch = Stopwatch.StartNew();
             double cannyThreshold = 180.0;
@@ -161,17 +163,31 @@ namespace IntSys05_EmguCV
             // debug cross
             //triangleRectangleImage.Draw(new Cross2DF(new PointF(367, 181), 30, 30), new Bgr(Color.White), 2);
 
-            /* DEPRICATED
-            #region draw lines
-            Image<Bgr, Byte> lineImage = img.CopyBlank();
-            foreach (LineSegment2D line in lines)
-                triangleRectangleImage.Draw(line, new Bgr(Color.Green), 2);
-            imgBoxDetected.Image = triangleRectangleImage;
-            #endregion*/
 
-
-            Debug.WriteLine(msgBuilder.ToString());
         }
+
+        void DetectColor()
+        {
+            Hsv targetColor = new Hsv(100, 210, 210);
+            int tressholdHue = 15;
+            int tressholdSat = 45;
+            int tressholdVal = 45;
+
+            Image<Bgr, Byte> image = new Image<Bgr, byte>(imagePath);
+            //frame = frame.SmoothGaussian(3, 3, 1, 1);
+            
+            Hsv m_Lower = new Hsv(targetColor.Hue - tressholdHue, targetColor.Satuation - tressholdSat, targetColor.Value - tressholdVal);
+            Hsv m_Higher = new Hsv(targetColor.Hue + tressholdHue, targetColor.Satuation + tressholdSat, targetColor.Value + tressholdVal);
+
+            Image<Hsv, Byte> HsvImage = image.Convert<Hsv, byte>();
+            HsvImage = HsvImage.SmoothGaussian(5, 5, 0.1, 0.1);
+            Image<Gray, byte> detectedImage = HsvImage.InRange(m_Lower, m_Higher);
+
+            // return detected image here
+        }
+
+
+        // Form controls ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         private void btnImagePath_Click_1(object sender, EventArgs e)
         { // set image path

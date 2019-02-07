@@ -56,7 +56,7 @@
             // imgBoxDetected
             // 
             this.imgBoxDetected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imgBoxDetected.Location = new System.Drawing.Point(504, 12);
+            this.imgBoxDetected.Location = new System.Drawing.Point(502, 12);
             this.imgBoxDetected.Name = "imgBoxDetected";
             this.imgBoxDetected.Size = new System.Drawing.Size(480, 270);
             this.imgBoxDetected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -69,7 +69,7 @@
             this.imgBoxOriginal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.imgBoxOriginal.Location = new System.Drawing.Point(12, 12);
             this.imgBoxOriginal.Name = "imgBoxOriginal";
-            this.imgBoxOriginal.Size = new System.Drawing.Size(486, 270);
+            this.imgBoxOriginal.Size = new System.Drawing.Size(480, 270);
             this.imgBoxOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgBoxOriginal.TabIndex = 3;
             this.imgBoxOriginal.TabStop = false;
@@ -108,9 +108,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(994, 568);
+            this.Controls.Add(this.imgBoxDetected);
             this.Controls.Add(this.btnImagePath);
             this.Controls.Add(this.imgBoxOriginal);
-            this.Controls.Add(this.imgBoxDetected);
             this.Controls.Add(this.tboxImagePath);
             this.Controls.Add(this.btnStart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

@@ -34,14 +34,8 @@ namespace IntSys05_EmguCV
         private void btnStart_Click(object sender, EventArgs e)
         {
             // debug path
-            imagePath = "D://Workbench//Shapes.jpg";
-
-            // Load image
-            image = new Image<Bgr, byte>(imagePath);
-
-            // show image in imageBox
-            imgBoxOriginal.Image = image;
-
+            //imagePath = "D://Workbench//Shapes.jpg";
+            //imgBoxOriginal.Image = image;
 
             // Convert the image to grayscale and filter out the noise
             UMat uImage = new UMat();
@@ -356,8 +350,16 @@ namespace IntSys05_EmguCV
                 catch
                 {
                     MessageBox.Show("Could not load the image. Are you sure it was a proper image file?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
             }
+            else
+            {
+                return;
+            }
+
+            // if all ok set image
+            image = new Image<Bgr, byte>(imagePath);
         }
 
         private void imgBoxOriginal_DoubleClick(object sender, EventArgs e)
@@ -386,6 +388,22 @@ namespace IntSys05_EmguCV
             {
                 sliderFilterByColor.Enabled = false;
             }
+        }
+
+        private void btnEdgeDetect_Click(object sender, EventArgs e)
+        {
+            if(image == null)
+            {
+                MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            UMat uImage = new UMat();
+            uImage = image.ToUMat();
+
+            uImage = DetectEdges(uImage);
+
+            imgBoxOriginal.Image = uImage;
         }
     }
 }

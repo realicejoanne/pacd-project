@@ -46,12 +46,17 @@
             this.tbArea = new System.Windows.Forms.TextBox();
             this.toolTipArea = new System.Windows.Forms.ToolTip(this.components);
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnEdgeDetect = new System.Windows.Forms.Button();
+            this.btnBrightness = new System.Windows.Forms.Button();
+            this.btnContrast = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxDetected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxOriginal)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderFilterByColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -267,12 +272,71 @@
             this.label1.TabIndex = 23;
             this.label1.Text = "Area:";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnContrast);
+            this.groupBox3.Controls.Add(this.btnBrightness);
+            this.groupBox3.Controls.Add(this.btnEdgeDetect);
+            this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.ForeColor = System.Drawing.Color.LightCyan;
+            this.groupBox3.Location = new System.Drawing.Point(528, 347);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(387, 141);
+            this.groupBox3.TabIndex = 24;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Filters";
+            // 
+            // btnEdgeDetect
+            // 
+            this.btnEdgeDetect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnEdgeDetect.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnEdgeDetect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEdgeDetect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdgeDetect.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnEdgeDetect.Location = new System.Drawing.Point(16, 27);
+            this.btnEdgeDetect.Name = "btnEdgeDetect";
+            this.btnEdgeDetect.Size = new System.Drawing.Size(105, 30);
+            this.btnEdgeDetect.TabIndex = 25;
+            this.btnEdgeDetect.Text = "Edge detect";
+            this.btnEdgeDetect.UseVisualStyleBackColor = false;
+            this.btnEdgeDetect.Click += new System.EventHandler(this.btnEdgeDetect_Click);
+            // 
+            // btnBrightness
+            // 
+            this.btnBrightness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnBrightness.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnBrightness.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBrightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBrightness.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnBrightness.Location = new System.Drawing.Point(16, 63);
+            this.btnBrightness.Name = "btnBrightness";
+            this.btnBrightness.Size = new System.Drawing.Size(105, 30);
+            this.btnBrightness.TabIndex = 26;
+            this.btnBrightness.Text = "Brightness";
+            this.btnBrightness.UseVisualStyleBackColor = false;
+            // 
+            // btnContrast
+            // 
+            this.btnContrast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnContrast.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnContrast.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnContrast.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnContrast.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnContrast.Location = new System.Drawing.Point(16, 99);
+            this.btnContrast.Name = "btnContrast";
+            this.btnContrast.Size = new System.Drawing.Size(105, 30);
+            this.btnContrast.TabIndex = 27;
+            this.btnContrast.Text = "Contrast";
+            this.btnContrast.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(994, 568);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbArea);
             this.Controls.Add(this.groupBox2);
@@ -295,6 +359,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,6 +384,10 @@
         private System.Windows.Forms.ToolTip toolTipArea;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.TextBox tbArea;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnContrast;
+        private System.Windows.Forms.Button btnBrightness;
+        private System.Windows.Forms.Button btnEdgeDetect;
     }
 }
 

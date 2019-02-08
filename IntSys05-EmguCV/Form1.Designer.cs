@@ -43,6 +43,9 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cbFilterByColor = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tbArea = new System.Windows.Forms.TextBox();
+            this.toolTipArea = new System.Windows.Forms.ToolTip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxDetected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxOriginal)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -234,12 +237,44 @@
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             // 
+            // tbArea
+            // 
+            this.tbArea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tbArea.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbArea.ForeColor = System.Drawing.Color.LightCyan;
+            this.tbArea.Location = new System.Drawing.Point(59, 454);
+            this.tbArea.Name = "tbArea";
+            this.tbArea.Size = new System.Drawing.Size(100, 24);
+            this.tbArea.TabIndex = 22;
+            this.toolTipArea.SetToolTip(this.tbArea, "Only detect shapes of specified area. Leave empty to detect all sizes.");
+            // 
+            // toolTipArea
+            // 
+            this.toolTipArea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.toolTipArea.ForeColor = System.Drawing.Color.LightCyan;
+            this.toolTipArea.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipArea.ToolTipTitle = "Area";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.LightCyan;
+            this.label1.Location = new System.Drawing.Point(15, 457);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 18);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Area:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(994, 568);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tbArea);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.imgBoxDetected);
@@ -281,6 +316,9 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.CheckBox cbFilterByColor;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ToolTip toolTipArea;
+        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.TextBox tbArea;
     }
 }
 

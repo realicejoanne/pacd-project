@@ -20,7 +20,7 @@ namespace IntSys05_EmguCV
         public string imagePath;
         public Image<Bgr, Byte> image;
 
-        public CircleF[] circles;
+        public List<CircleF> circles;
         public List<Triangle2DF> triangles;
         public List<RotatedRect> rectangles;
         public List<LineSegment2D[]> hexagons;
@@ -60,6 +60,9 @@ namespace IntSys05_EmguCV
             rectangles = null;
             hexagons = null;
 
+            // get area value from text box
+            int area = 0;
+            int.TryParse(tbArea.Text, out area);
 
             if(cbFilterByColor.Checked)
             { // filter by colors
@@ -67,79 +70,57 @@ namespace IntSys05_EmguCV
 
                 if (cbCircles.Checked)
                 {
-                    DetectCirclesColored(uImage);
+                    DetectCirclesColored(uImage, area);
                 }
 
-                DetectPolygons(uImage, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked);
-
-
-                
-
-                /*
-                // Convert the image to grayscale and filter out the noise
-                CvInvoke.CvtColor(image2, uImage, ColorConversion.Bgr2Gray);
-
-                // Use image pyr to remove noise
-                UMat pyrDown2 = new UMat();
-                CvInvoke.PyrDown(uImage, pyrDown2);
-                CvInvoke.PyrUp(pyrDown2, uImage);
-                //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
-                */
-
-
-                // circles test
-               /* Image<Gray, Byte> gray = image2.Convert<Gray, Byte>();
-                Gray cannyThreshold = new Gray(180);
-                Gray cannyThresholdLinking = new Gray(120);
-                Gray circleAccumulatorThreshold = new Gray(60);
-
-                imgBoxOriginal.Image = gray;
-
-                circles = gray.HoughCircles(
-                    cannyThreshold,
-                    circleAccumulatorThreshold,
-                    4.0, //Resolution of the accumulator used to detect centers of the circles
-                    50.0, //min distance 
-                    2, //min radius
-                    100 //max radius
-                    )[0]; //Get the circles from the first channel
-                */
+                DetectPolygons(uImage, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked, area);
             }
             else
             { // detect all colors
                 if (cbCircles.Checked)
                 {
-                    DetectCircles(uImage);
+                    DetectCircles(uImage, area);
                 }
 
                 UMat cannyEdgesImg = DetectEdges(uImage);
 
-                DetectPolygons(cannyEdgesImg, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked);
+                DetectPolygons(cannyEdgesImg, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked, area);
             }
             
 
             DrawShapes();
         }
 
-        void DetectCircles(UMat uImage)
+        void DetectCircles(UMat uImage, int area)
         {
+            circles = new List<CircleF>();
+
             double cannyThreshold = 180.0;
             double circleAccumulatorThreshold = 120;
 
-            circles = CvInvoke.HoughCircles(uImage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
+            CircleF[] circlesArray = CvInvoke.HoughCircles(uImage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
+
+            foreach (CircleF circle in circlesArray)
+            { // add circles from array to circles list
+                circles.Add(circle);
+            }
+
+            FilterCirclesByArea(area);
         }
 
-        void DetectCirclesColored(UMat uBinaryImage)
+        void DetectCirclesColored(UMat uBinaryImage, int area)
         {
+            circles = new List<CircleF>();
+
             Image<Bgr, byte> img;
             img = uBinaryImage.ToImage<Bgr, byte>();
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
 
             Gray cannyThreshold = new Gray(180);
             Gray cannyThresholdLinking = new Gray(120);
-            Gray circleAccumulatorThreshold = new Gray(60);
+            Gray circleAccumulatorThreshold = new Gray(90);    // default 60
 
-            circles = gray.HoughCircles(
+            CircleF[] circlesArray = gray.HoughCircles(
                 cannyThreshold,
                 circleAccumulatorThreshold,
                 4.0, //Resolution of the accumulator used to detect centers of the circles
@@ -147,6 +128,31 @@ namespace IntSys05_EmguCV
                 2, //min radius
                 100 //max radius
                 )[0]; //Get the circles from the first channel
+
+            foreach(CircleF circle in circlesArray)
+            { // add circles from array to circles list
+                circles.Add(circle);
+            }
+
+            FilterCirclesByArea(area);
+        }
+
+        void FilterCirclesByArea(int area)
+        {
+            // delete circles outside of defined area
+            if (area != 0)
+            { // but, only if area is specified
+                int areaTresshold = 1000;
+                CircleF[] circlesTmp;
+                for (int i = 0; i < circles.Count; i++)
+                {
+                    if (circles[i].Area < area - areaTresshold || circles[i].Area > area + areaTresshold)
+                    { // if circle is smaller than min or bigger than max -> delete from array
+                        circles.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
         }
 
         UMat DetectEdges(UMat uImage)
@@ -161,7 +167,7 @@ namespace IntSys05_EmguCV
             return cannyEdgesImg;
         }
 
-        void DetectPolygons(UMat cannyEdgesImg, bool detectTriangles, bool detectRectangles, bool detectHexagons)
+        void DetectPolygons(UMat cannyEdgesImg, bool detectTriangles, bool detectRectangles, bool detectHexagons, int area)
         {
             triangles = new List<Triangle2DF>();
             rectangles = new List<RotatedRect>();
@@ -182,6 +188,21 @@ namespace IntSys05_EmguCV
 
                 if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours bigger than defined area
                 {
+                    int areaTresshold = 1000;
+                    if(area != 0)
+                    {
+                        if (CvInvoke.ContourArea(approxContour, false) < area - areaTresshold || CvInvoke.ContourArea(approxContour, false) > area + areaTresshold)
+                        { //only consider contours near defined area
+                          // if area is smaller or bigger than defined -> continue to next countour as this one doesn't fit
+                            continue;
+                        }
+
+                        // debug - min area
+                        //if (CvInvoke.ContourArea(approxContour, false) > area)
+                        //    continue;
+                    }
+                    
+
                     if (approxContour.Size == 3 && detectTriangles)
                     { // triangle
 

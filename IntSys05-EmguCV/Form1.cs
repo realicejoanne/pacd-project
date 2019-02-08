@@ -45,7 +45,7 @@ namespace IntSys05_EmguCV
 
             // Convert the image to grayscale and filter out the noise
             UMat uImage = new UMat();
-            //uImage = image.ToUMat();
+            //uImage = image.ToUMat();  // uncomment this and comment next line to skip graying out the image
             CvInvoke.CvtColor(image, uImage, ColorConversion.Bgr2Gray);
 
             // Use image pyr to remove noise
@@ -62,11 +62,20 @@ namespace IntSys05_EmguCV
 
 
             if(cbFilterByColor.Checked)
-            { // WIP
-                uImage = DetectColor(sliderFilterByColor.Value);
-                Image<Bgr, byte> image2;
-                image2 = uImage.ToImage<Bgr, byte>();
-               
+            { // filter by colors
+                uImage = DetectColor(sliderFilterByColor.Value);    // returns UMat binary image
+
+                if (cbCircles.Checked)
+                {
+                    DetectCirclesColored(uImage);
+                }
+
+                DetectPolygons(uImage, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked);
+
+
+                
+
+                /*
                 // Convert the image to grayscale and filter out the noise
                 CvInvoke.CvtColor(image2, uImage, ColorConversion.Bgr2Gray);
 
@@ -75,24 +84,41 @@ namespace IntSys05_EmguCV
                 CvInvoke.PyrDown(uImage, pyrDown2);
                 CvInvoke.PyrUp(pyrDown2, uImage);
                 //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
-                
+                */
+
+
+                // circles test
+               /* Image<Gray, Byte> gray = image2.Convert<Gray, Byte>();
+                Gray cannyThreshold = new Gray(180);
+                Gray cannyThresholdLinking = new Gray(120);
+                Gray circleAccumulatorThreshold = new Gray(60);
+
+                imgBoxOriginal.Image = gray;
+
+                circles = gray.HoughCircles(
+                    cannyThreshold,
+                    circleAccumulatorThreshold,
+                    4.0, //Resolution of the accumulator used to detect centers of the circles
+                    50.0, //min distance 
+                    2, //min radius
+                    100 //max radius
+                    )[0]; //Get the circles from the first channel
+                */
             }
+            else
+            { // detect all colors
+                if (cbCircles.Checked)
+                {
+                    DetectCircles(uImage);
+                }
 
+                UMat cannyEdgesImg = DetectEdges(uImage);
 
-            if (cbCircles.Checked)
-            {
-                DetectCircles(uImage);
+                DetectPolygons(cannyEdgesImg, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked);
             }
             
-            //UMat cannyEdgesImg = DetectEdges(uImage);
-            DetectPolygons(uImage, cbTriangles.Checked, cbRectangles.Checked, cbHexagons.Checked);
 
             DrawShapes();
-
-
-
-            // debug
-            //imgBoxOriginal.Image = uImage;
         }
 
         void DetectCircles(UMat uImage)
@@ -101,6 +127,26 @@ namespace IntSys05_EmguCV
             double circleAccumulatorThreshold = 120;
 
             circles = CvInvoke.HoughCircles(uImage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
+        }
+
+        void DetectCirclesColored(UMat uBinaryImage)
+        {
+            Image<Bgr, byte> img;
+            img = uBinaryImage.ToImage<Bgr, byte>();
+            Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
+
+            Gray cannyThreshold = new Gray(180);
+            Gray cannyThresholdLinking = new Gray(120);
+            Gray circleAccumulatorThreshold = new Gray(60);
+
+            circles = gray.HoughCircles(
+                cannyThreshold,
+                circleAccumulatorThreshold,
+                4.0, //Resolution of the accumulator used to detect centers of the circles
+                50.0, //min distance 
+                2, //min radius
+                100 //max radius
+                )[0]; //Get the circles from the first channel
         }
 
         UMat DetectEdges(UMat uImage)
@@ -262,7 +308,7 @@ namespace IntSys05_EmguCV
             HsvImage = HsvImage.SmoothGaussian(5, 5, 0.1, 0.1);
             Image<Gray, byte> detectedImage = HsvImage.InRange(m_Lower, m_Higher);
 
-            detectedImage = detectedImage.Not();
+            //detectedImage = detectedImage.Not();
             return detectedImage.ToUMat();
         }
 

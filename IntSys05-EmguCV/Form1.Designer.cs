@@ -52,6 +52,10 @@
             this.btnBrightness = new System.Windows.Forms.Button();
             this.btnEdgeDetect = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.tbContrast = new System.Windows.Forms.TrackBar();
+            this.tbBrightness = new System.Windows.Forms.TrackBar();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxDetected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxOriginal)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -59,6 +63,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbContrast)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbBrightness)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStart
@@ -276,6 +282,10 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.tbBrightness);
+            this.groupBox3.Controls.Add(this.tbContrast);
             this.groupBox3.Controls.Add(this.btnReset);
             this.groupBox3.Controls.Add(this.btnContrast);
             this.groupBox3.Controls.Add(this.btnBrightness);
@@ -355,10 +365,56 @@
             this.lblStatus.AutoSize = true;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.ForeColor = System.Drawing.Color.LightCyan;
-            this.lblStatus.Location = new System.Drawing.Point(23, 508);
+            this.lblStatus.Location = new System.Drawing.Point(18, 508);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 18);
             this.lblStatus.TabIndex = 25;
+            // 
+            // tbContrast
+            // 
+            this.tbContrast.AutoSize = false;
+            this.tbContrast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tbContrast.Location = new System.Drawing.Point(127, 113);
+            this.tbContrast.Maximum = 150;
+            this.tbContrast.Minimum = 50;
+            this.tbContrast.Name = "tbContrast";
+            this.tbContrast.Size = new System.Drawing.Size(336, 28);
+            this.tbContrast.TabIndex = 29;
+            this.tbContrast.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.tbContrast.Value = 100;
+            // 
+            // tbBrightness
+            // 
+            this.tbBrightness.AutoSize = false;
+            this.tbBrightness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tbBrightness.Location = new System.Drawing.Point(127, 68);
+            this.tbBrightness.Maximum = 100;
+            this.tbBrightness.Minimum = -100;
+            this.tbBrightness.Name = "tbBrightness";
+            this.tbBrightness.Size = new System.Drawing.Size(336, 28);
+            this.tbBrightness.SmallChange = 2;
+            this.tbBrightness.TabIndex = 30;
+            this.tbBrightness.TickStyle = System.Windows.Forms.TickStyle.None;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(293, 92);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(7, 9);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "|";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(293, 137);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(7, 9);
+            this.label3.TabIndex = 31;
+            this.label3.Text = "|";
             // 
             // Form1
             // 
@@ -391,6 +447,9 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbContrast)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbBrightness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -421,6 +480,10 @@
         private System.Windows.Forms.Button btnEdgeDetect;
         public System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnReset;
+        public System.Windows.Forms.TrackBar tbContrast;
+        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.TrackBar tbBrightness;
+        private System.Windows.Forms.Label label3;
     }
 }
 

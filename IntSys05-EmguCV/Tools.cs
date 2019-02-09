@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,17 @@ namespace IntSys05_EmguCV
 {
     public static class Tools
     {
+        static double RGBChannelFromHue(double m1, double m2, double h)
+        {
+            h = (h + 1d) % 1d;
+            if (h < 0) h += 1;
+            if (h * 6 < 1) return m1 + (m2 - m1) * 6 * h;
+            else if (h * 2 < 1) return m2;
+            else if (h * 3 < 2) return m1 + (m2 - m1) * 6 * (2d / 3d - h);
+            else return m1;
+
+        }
+
         public static void RGBtoHSV(int r, int g, int b)
         {
             double h, s, v;

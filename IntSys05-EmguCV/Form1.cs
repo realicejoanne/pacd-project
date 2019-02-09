@@ -39,8 +39,7 @@ namespace IntSys05_EmguCV
                 return;
             }
 
-            lblStatus.Text = "Working...";
-            this.Update();
+            SetWorking();
 
             // debug path
             //imagePath = "D://Workbench//Shapes.jpg";
@@ -338,6 +337,46 @@ namespace IntSys05_EmguCV
             return detectedImage.ToUMat();
         }
 
+        void SetWorking()
+        {
+            lblStatus.Text = "Working...";
+            this.Update();
+        }
+
+        Bitmap Contrast(Bitmap img, float value)
+        {
+            for(int i = 0; i < img.Width; i++)
+            {
+                for (int j = 0; j < img.Height; j++)
+                {
+                    Color pixel = img.GetPixel(i, j);
+
+                    int newR = (int)(value * (pixel.R - 128) + 128);
+                    int newG = (int)(value * (pixel.G - 128) + 128);
+                    int newB = (int)(value * (pixel.B - 128) + 128);
+
+                    if (newR < 0)
+                        newR = 0;
+                    if (newR > 255)
+                        newR = 255;
+                    if (newG < 0)
+                        newG = 0;
+                    if (newG > 255)
+                        newG = 255;
+                    if (newB < 0)
+                        newB = 0;
+                    if (newB > 255)
+                        newB = 255;
+
+                    Color newPixel = Color.FromArgb(newR, newG, newB);
+
+                    img.SetPixel(i, j, newPixel);
+                }
+            }
+
+            return img;
+        }
+
 
         // Form controls ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
@@ -345,7 +384,10 @@ namespace IntSys05_EmguCV
         { // set image path
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image files (*.jpg;*.jpeg;*.png;*.bmp;)|*.jpg;*.jpeg;*.png;*.bmp;|All files (*.*)|*.*";
-            ofd.ShowDialog();
+            if(ofd.ShowDialog() == DialogResult.Cancel)
+            {
+                return;
+            }
             imagePath = ofd.FileName;
 
             tboxImagePath.Text = "  " + imagePath;   // update label
@@ -408,8 +450,7 @@ namespace IntSys05_EmguCV
                 MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            lblStatus.Text = "Working...";            
+            SetWorking();
 
             UMat uImage = new UMat();
             uImage = image.ToUMat();
@@ -428,8 +469,9 @@ namespace IntSys05_EmguCV
                 MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            SetWorking();
 
-            image += 10;
+            image += tbBrightness.Value;
             imgBoxOriginal.Image = image;
 
             lblStatus.Text = "Done!";
@@ -437,7 +479,19 @@ namespace IntSys05_EmguCV
 
         private void btnContrast_Click(object sender, EventArgs e)
         {
+            if (image == null)
+            {
+                MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            SetWorking();
 
+            float value = (float)tbContrast.Value / 100;
+            image = new Image<Bgr, Byte>(Contrast(image.ToBitmap(), value));
+
+            imgBoxOriginal.Image = image;
+
+            lblStatus.Text = "Done!";
         }
 
         private void btnReset_Click(object sender, EventArgs e)

@@ -47,9 +47,11 @@
             this.toolTipArea = new System.Windows.Forms.ToolTip(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnEdgeDetect = new System.Windows.Forms.Button();
-            this.btnBrightness = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
             this.btnContrast = new System.Windows.Forms.Button();
+            this.btnBrightness = new System.Windows.Forms.Button();
+            this.btnEdgeDetect = new System.Windows.Forms.Button();
+            this.lblStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxDetected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBoxOriginal)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -64,11 +66,11 @@
             this.btnStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.btnStart.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
             this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.ForeColor = System.Drawing.Color.LightCyan;
-            this.btnStart.Location = new System.Drawing.Point(460, 505);
+            this.btnStart.Location = new System.Drawing.Point(431, 492);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(90, 30);
+            this.btnStart.Size = new System.Drawing.Size(132, 33);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = false;
@@ -103,7 +105,7 @@
             this.tboxImagePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tboxImagePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tboxImagePath.ForeColor = System.Drawing.Color.LightCyan;
-            this.tboxImagePath.Location = new System.Drawing.Point(12, 307);
+            this.tboxImagePath.Location = new System.Drawing.Point(12, 308);
             this.tboxImagePath.Name = "tboxImagePath";
             this.tboxImagePath.Size = new System.Drawing.Size(440, 24);
             this.tboxImagePath.TabIndex = 18;
@@ -116,7 +118,7 @@
             this.btnImagePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImagePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImagePath.ForeColor = System.Drawing.Color.LightCyan;
-            this.btnImagePath.Location = new System.Drawing.Point(458, 307);
+            this.btnImagePath.Location = new System.Drawing.Point(458, 308);
             this.btnImagePath.Name = "btnImagePath";
             this.btnImagePath.Size = new System.Drawing.Size(34, 24);
             this.btnImagePath.TabIndex = 19;
@@ -135,7 +137,7 @@
             this.groupBox1.ForeColor = System.Drawing.Color.LightCyan;
             this.groupBox1.Location = new System.Drawing.Point(12, 347);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(229, 91);
+            this.groupBox1.Size = new System.Drawing.Size(217, 108);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Detect shapes";
@@ -146,7 +148,7 @@
             this.cbHexagons.Checked = true;
             this.cbHexagons.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbHexagons.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbHexagons.Location = new System.Drawing.Point(120, 57);
+            this.cbHexagons.Location = new System.Drawing.Point(110, 65);
             this.cbHexagons.Name = "cbHexagons";
             this.cbHexagons.Size = new System.Drawing.Size(94, 22);
             this.cbHexagons.TabIndex = 3;
@@ -159,7 +161,7 @@
             this.cbRectangles.Checked = true;
             this.cbRectangles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbRectangles.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbRectangles.Location = new System.Drawing.Point(120, 29);
+            this.cbRectangles.Location = new System.Drawing.Point(110, 32);
             this.cbRectangles.Name = "cbRectangles";
             this.cbRectangles.Size = new System.Drawing.Size(101, 22);
             this.cbRectangles.TabIndex = 2;
@@ -172,7 +174,7 @@
             this.cbTriangles.Checked = true;
             this.cbTriangles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbTriangles.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbTriangles.Location = new System.Drawing.Point(16, 57);
+            this.cbTriangles.Location = new System.Drawing.Point(12, 65);
             this.cbTriangles.Name = "cbTriangles";
             this.cbTriangles.Size = new System.Drawing.Size(87, 22);
             this.cbTriangles.TabIndex = 1;
@@ -185,7 +187,7 @@
             this.cbCircles.Checked = true;
             this.cbCircles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbCircles.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbCircles.Location = new System.Drawing.Point(16, 29);
+            this.cbCircles.Location = new System.Drawing.Point(12, 32);
             this.cbCircles.Name = "cbCircles";
             this.cbCircles.Size = new System.Drawing.Size(73, 22);
             this.cbCircles.TabIndex = 0;
@@ -197,10 +199,10 @@
             this.sliderFilterByColor.AutoSize = false;
             this.sliderFilterByColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.sliderFilterByColor.Enabled = false;
-            this.sliderFilterByColor.Location = new System.Drawing.Point(8, 48);
+            this.sliderFilterByColor.Location = new System.Drawing.Point(1, 48);
             this.sliderFilterByColor.Maximum = 180;
             this.sliderFilterByColor.Name = "sliderFilterByColor";
-            this.sliderFilterByColor.Size = new System.Drawing.Size(260, 28);
+            this.sliderFilterByColor.Size = new System.Drawing.Size(251, 28);
             this.sliderFilterByColor.TabIndex = 21;
             this.sliderFilterByColor.TickStyle = System.Windows.Forms.TickStyle.None;
             // 
@@ -208,9 +210,9 @@
             // 
             this.pictureBox1.Enabled = false;
             this.pictureBox1.Image = global::IntSys05_EmguCV.Properties.Resources.SpectrumSmall;
-            this.pictureBox1.Location = new System.Drawing.Point(17, 77);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 77);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(243, 16);
+            this.pictureBox1.Size = new System.Drawing.Size(234, 16);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 26;
             this.pictureBox1.TabStop = false;
@@ -220,7 +222,7 @@
             this.cbFilterByColor.AutoSize = true;
             this.cbFilterByColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbFilterByColor.ForeColor = System.Drawing.Color.LightCyan;
-            this.cbFilterByColor.Location = new System.Drawing.Point(17, 20);
+            this.cbFilterByColor.Location = new System.Drawing.Point(9, 20);
             this.cbFilterByColor.Name = "cbFilterByColor";
             this.cbFilterByColor.Size = new System.Drawing.Size(116, 22);
             this.cbFilterByColor.TabIndex = 4;
@@ -236,9 +238,9 @@
             this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.LightCyan;
-            this.groupBox2.Location = new System.Drawing.Point(247, 347);
+            this.groupBox2.Location = new System.Drawing.Point(235, 347);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(275, 108);
+            this.groupBox2.Size = new System.Drawing.Size(257, 108);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             // 
@@ -248,9 +250,9 @@
             this.tbArea.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tbArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbArea.ForeColor = System.Drawing.Color.LightCyan;
-            this.tbArea.Location = new System.Drawing.Point(59, 454);
+            this.tbArea.Location = new System.Drawing.Point(62, 461);
             this.tbArea.Name = "tbArea";
-            this.tbArea.Size = new System.Drawing.Size(100, 24);
+            this.tbArea.Size = new System.Drawing.Size(167, 24);
             this.tbArea.TabIndex = 22;
             this.toolTipArea.SetToolTip(this.tbArea, "Only detect shapes of specified area. Leave empty to detect all sizes.");
             // 
@@ -266,7 +268,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.LightCyan;
-            this.label1.Location = new System.Drawing.Point(15, 457);
+            this.label1.Location = new System.Drawing.Point(18, 464);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 18);
             this.label1.TabIndex = 23;
@@ -274,47 +276,34 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnReset);
             this.groupBox3.Controls.Add(this.btnContrast);
             this.groupBox3.Controls.Add(this.btnBrightness);
             this.groupBox3.Controls.Add(this.btnEdgeDetect);
             this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.LightCyan;
-            this.groupBox3.Location = new System.Drawing.Point(528, 347);
+            this.groupBox3.Location = new System.Drawing.Point(502, 300);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(387, 141);
+            this.groupBox3.Size = new System.Drawing.Size(480, 155);
             this.groupBox3.TabIndex = 24;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filters";
             // 
-            // btnEdgeDetect
+            // btnReset
             // 
-            this.btnEdgeDetect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.btnEdgeDetect.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.btnEdgeDetect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEdgeDetect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEdgeDetect.ForeColor = System.Drawing.Color.LightCyan;
-            this.btnEdgeDetect.Location = new System.Drawing.Point(16, 27);
-            this.btnEdgeDetect.Name = "btnEdgeDetect";
-            this.btnEdgeDetect.Size = new System.Drawing.Size(105, 30);
-            this.btnEdgeDetect.TabIndex = 25;
-            this.btnEdgeDetect.Text = "Edge detect";
-            this.btnEdgeDetect.UseVisualStyleBackColor = false;
-            this.btnEdgeDetect.Click += new System.EventHandler(this.btnEdgeDetect_Click);
-            // 
-            // btnBrightness
-            // 
-            this.btnBrightness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.btnBrightness.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.btnBrightness.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBrightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBrightness.ForeColor = System.Drawing.Color.LightCyan;
-            this.btnBrightness.Location = new System.Drawing.Point(16, 63);
-            this.btnBrightness.Name = "btnBrightness";
-            this.btnBrightness.Size = new System.Drawing.Size(105, 30);
-            this.btnBrightness.TabIndex = 26;
-            this.btnBrightness.Text = "Brightness";
-            this.btnBrightness.UseVisualStyleBackColor = false;
+            this.btnReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnReset.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReset.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnReset.Location = new System.Drawing.Point(358, 23);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(105, 30);
+            this.btnReset.TabIndex = 28;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = false;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // btnContrast
             // 
@@ -323,19 +312,61 @@
             this.btnContrast.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnContrast.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnContrast.ForeColor = System.Drawing.Color.LightCyan;
-            this.btnContrast.Location = new System.Drawing.Point(16, 99);
+            this.btnContrast.Location = new System.Drawing.Point(16, 113);
             this.btnContrast.Name = "btnContrast";
             this.btnContrast.Size = new System.Drawing.Size(105, 30);
             this.btnContrast.TabIndex = 27;
             this.btnContrast.Text = "Contrast";
             this.btnContrast.UseVisualStyleBackColor = false;
+            this.btnContrast.Click += new System.EventHandler(this.btnContrast_Click);
+            // 
+            // btnBrightness
+            // 
+            this.btnBrightness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnBrightness.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnBrightness.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBrightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBrightness.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnBrightness.Location = new System.Drawing.Point(16, 68);
+            this.btnBrightness.Name = "btnBrightness";
+            this.btnBrightness.Size = new System.Drawing.Size(105, 30);
+            this.btnBrightness.TabIndex = 26;
+            this.btnBrightness.Text = "Brightness";
+            this.btnBrightness.UseVisualStyleBackColor = false;
+            this.btnBrightness.Click += new System.EventHandler(this.btnBrightness_Click);
+            // 
+            // btnEdgeDetect
+            // 
+            this.btnEdgeDetect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.btnEdgeDetect.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnEdgeDetect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEdgeDetect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdgeDetect.ForeColor = System.Drawing.Color.LightCyan;
+            this.btnEdgeDetect.Location = new System.Drawing.Point(16, 23);
+            this.btnEdgeDetect.Name = "btnEdgeDetect";
+            this.btnEdgeDetect.Size = new System.Drawing.Size(105, 30);
+            this.btnEdgeDetect.TabIndex = 25;
+            this.btnEdgeDetect.Text = "Edge detect";
+            this.btnEdgeDetect.UseVisualStyleBackColor = false;
+            this.btnEdgeDetect.Click += new System.EventHandler(this.btnEdgeDetect_Click);
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.ForeColor = System.Drawing.Color.LightCyan;
+            this.lblStatus.Location = new System.Drawing.Point(23, 508);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 18);
+            this.lblStatus.TabIndex = 25;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.ClientSize = new System.Drawing.Size(994, 568);
+            this.ClientSize = new System.Drawing.Size(994, 537);
+            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbArea);
@@ -388,6 +419,8 @@
         private System.Windows.Forms.Button btnContrast;
         private System.Windows.Forms.Button btnBrightness;
         private System.Windows.Forms.Button btnEdgeDetect;
+        public System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.Button btnReset;
     }
 }
 

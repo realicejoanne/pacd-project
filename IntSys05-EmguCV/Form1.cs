@@ -33,6 +33,15 @@ namespace IntSys05_EmguCV
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if (image == null)
+            {
+                MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            lblStatus.Text = "Working...";
+            this.Update();
+
             // debug path
             //imagePath = "D://Workbench//Shapes.jpg";
             //imgBoxOriginal.Image = image;
@@ -83,6 +92,8 @@ namespace IntSys05_EmguCV
             
 
             DrawShapes();
+
+            lblStatus.Text = "Done!";
         }
 
         void DetectCircles(UMat uImage, int area)
@@ -392,18 +403,53 @@ namespace IntSys05_EmguCV
 
         private void btnEdgeDetect_Click(object sender, EventArgs e)
         {
-            if(image == null)
+            if (image == null)
             {
                 MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            lblStatus.Text = "Working...";            
+
             UMat uImage = new UMat();
             uImage = image.ToUMat();
 
-            uImage = DetectEdges(uImage);
+            image = DetectEdges(uImage).ToImage<Bgr, byte>();
 
-            imgBoxOriginal.Image = uImage;
+            imgBoxOriginal.Image = image;
+
+            lblStatus.Text = "Done!";
+        }
+
+        private void btnBrightness_Click(object sender, EventArgs e)
+        {
+            if (image == null)
+            {
+                MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            image += 10;
+            imgBoxOriginal.Image = image;
+
+            lblStatus.Text = "Done!";
+        }
+
+        private void btnContrast_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (image == null)
+            {
+                MessageBox.Show("Maybe load the image first?", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            image = new Image<Bgr, byte>(imagePath);
+            imgBoxOriginal.Image = image;
         }
     }
 }

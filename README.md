@@ -1,5 +1,11 @@
-# IntSys05-EmguCV
+# Shape and Color Detector using EmguCV
 
-C# forms app made with EmguCV (OpenCV C# wrapper) that detects basic shapes. Shapes can be filtered by color or area. App can, also, apply some basic filters on loaded image.
+Digital Image Processing and Analysis Project by Patricia (140810160065).
 
-Video: https://youtu.be/wV0rj9Bc3B4
+## Packages
+This project needs:
+- EmguCV v3.4.3.3016
+- ZedGraph v5.1.7
+
+## Big Thanks
+Thanks to [Nezio](https://github.com/Nezio/IntSys05-EmguCV) for the idea and tutorial.
